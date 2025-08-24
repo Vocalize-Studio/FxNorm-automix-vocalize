@@ -29,8 +29,8 @@ NET="ours_S_Lb" # Model name
 
 # Inference for automatic mixing of vocals and instrumental
 # IMPORTANT: Please replace the placeholder file names below with your actual file names.
-python ../automix/inference.py --vocals ../mixes/vocals/IF_VOCALS.wav \
-  --other ../mixes/instrumental/IF_INSTRUMENTAL.wav \
+python ../automix/inference.py --vocals ../mixes/vocals/AllOfMe_converted_by_AOMFemale.wav \
+  --other ../mixes/instrumental/allofme_instrumental.wav \
   --output ../mixes/mix_vocals_instrumental.wav \
   --training-params ${CONFIGS_FOLDER}/${NET}.py \
   --nets ${MODELS_FOLDER}/${NET}/net_mixture.dump \

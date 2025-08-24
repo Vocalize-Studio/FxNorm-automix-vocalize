@@ -416,7 +416,6 @@ class Net(SeparationNet):
                             bias.data.fill_(0.)
                             # forget gate biases = log(uniform(1, Tmax-1))
                             bias.data[n:2*n] = \
-                                bias.data[n:2*n] = 
                                 torch.log(nn.init.uniform_(bias.data[0:n], Tmin, Tmax-1))
                             # input gate biases = -(forget gate biases)
                             bias.data[0:n] = -bias.data[n:2*n]
