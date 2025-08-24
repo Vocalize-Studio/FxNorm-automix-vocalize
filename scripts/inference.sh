@@ -34,7 +34,7 @@ python ../automix/inference.py --vocals dry_vocals.wav \
                     --impulse-responses ${PATH_IR} \
                     --pre-impulse-responses ${PATH_PRE_IR} \
                     --nets ${MODELS_FOLDER}/${NET}/net_mixture.dump \
-                    --weights ${MODELS_FOLDER}/${NET}/best_model_for_mixture_valid_stereo_loss_mean.params \
+                    --weights ${MODELS_FOLDER}/${NET}/current_model_for_mixture.params \
                     --features ${PATH_FEATURES}/features_MUSDB18.npy 
 
 # # Inference for automatic mixing of wet stems
@@ -46,7 +46,7 @@ python ../automix/inference.py --vocals dry_vocals.wav \
 #                     --training-params ${CONFIGS_FOLDER}/${NET}.py \
 #                     --impulse-responses ${PATH_IR} \
 #                     --nets ${MODELS_FOLDER}/${NET}/net_mixture.dump \
-#                     --weights ${MODELS_FOLDER}/${NET}/best_model_for_mixture_valid_stereo_loss_mean.params \
+#                     --weights ${MODELS_FOLDER}/${NET}/current_model_for_mixture.params \
 #                     --features ${PATH_FEATURES}/features_MUSDB18.npy \
 
 # # Inference to obtain summation of normalized stems

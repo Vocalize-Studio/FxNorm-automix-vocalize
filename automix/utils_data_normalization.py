@@ -114,12 +114,14 @@ def get_eq_matching(audio_t, ref_spec, sr=44100, n_fft=65536, hop_length=16384,
         diff_eq = db_to_amp(diff_eq)
         diff_eq = np.sqrt(diff_eq)
 
-        diff_filter = scipy.signal.firwin2(ntaps,
-                                           frq/np.max(frq),
-                                           diff_eq,
-                                           nfreqs=None, window='hamming',
-                                           nyq=None, antisymmetric=False)
-
+        diff_filter = scipy.signal.firwin2(
+            ntaps,
+            frq/np.max(frq),   # normalized [0..1] → Nyquist is 1.0 by default
+            diff_eq,
+            nfreqs=None,
+            window='hamming',
+            antisymmetric=False
+        )
 
         output = scipy.signal.filtfilt(diff_filter, 1, audio_t,
                                        axis=-1, padtype='odd', padlen=None,
@@ -318,21 +320,26 @@ def get_mean_peak(audio, sr=44100, true_peak=False, n_mels=128, percentile=75):
     peak = []
     std = []
     for ch in range(audio_.shape[-1]):
-        x = np.ascontiguousarray(audio_[:, ch])
+        x = np.ascontiguousarray(audio_[:, ch], dtype=np.float32)
 
         if true_peak:
-            x = librosa.resample(x, sr, 4*sr)
+            x = librosa.resample(x.astype(np.float64), sr, 4*sr).astype(np.float32)
             sr = 4*sr
             window_size = 4*window_size
             hop_size = 4*hop_size
             
         onset_func = aubio.onset('hfc', buf_size=window_size, hop_size=hop_size, samplerate=sr)
 
-        frames = librosa.util.frame(x, window_size, hop_size)
-        
+        frames = librosa.util.frame(
+            x,
+            frame_length=int(window_size),
+            hop_length=int(hop_size),
+        )
+
         onset_times = []
         for frame in frames.T:
-            
+           
+            f32 = np.ascontiguousarray(frame, dtype=np.float32)
             if onset_func(frame):
                 
                 onset_time = onset_func.get_last()

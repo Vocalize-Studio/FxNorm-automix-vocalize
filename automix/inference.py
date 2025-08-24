@@ -386,6 +386,8 @@ if __name__ == '__main__':
     
     baseline_sum = args.baseline_sum
     
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+
     if None in [features_path, weights, config_file] or baseline_sum:
         baseline_sum = True
         print('Processing sum of input stems...')
@@ -405,7 +407,7 @@ if __name__ == '__main__':
         for i in config['INPUTS']:
             STEMS.append(i.split('_')[0])
         
-        net = torch.load(args.nets)
+        net = torch.load(args.nets, weights_only=False)
         net.load_state_dict(torch.load(weights, map_location=lambda storage, loc: storage))
 
         unfolding_params = None
@@ -425,7 +427,7 @@ if __name__ == '__main__':
                          use_amp=config['USE_AMP'])
 
         # Transfer model to the GPU
-        super_net.to('cuda')
+        super_net.to(device)
         super_net.eval()
 
         if config['QUANTIZATION_OP'] is not None:
@@ -581,7 +583,7 @@ if __name__ == '__main__':
         with torch.no_grad():
 
             # move the input data to the GPUs
-            test_data = test_data.to(f'cuda:{0}') 
+            test_data = test_data.to(device) 
 
             test_out = super_net.inference(test_data)
 
@@ -599,7 +601,8 @@ if __name__ == '__main__':
                 save_wav(output_name, max_samplingrate, audio.T, subtype=max_subtype)
                 del audio
 
-            torch.cuda.empty_cache()
+            if device.type == 'cuda':
+                torch.cuda.empty_cache()
             del test_out, audio_out
             
     else:
