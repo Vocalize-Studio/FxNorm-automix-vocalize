@@ -13,6 +13,7 @@ automix/common_supernet.py
 automix/data_normalization.py
 automix/evaluate.py
 automix/inference.py
+automix/inference_wrapper.py
 automix/train.py
 automix/utils.py
 automix/utils_data_normalization.py

@@ -327,7 +327,7 @@ class SuperNet(nn.Module):
             dictionary of losses
         """
         
-        with amp.autocast(enabled=self.use_amp):
+        with torch.amp.autocast(self.device.type, enabled=self.use_amp):
             # x : (1 + n_targets x batch_size x time_length x n_channels)
 #             print('data', x.shape)
             n_stems = self.net.n_stems
@@ -394,7 +394,7 @@ class SuperNet(nn.Module):
             dictionary of losses
         """
         
-        with amp.autocast(enabled=self.use_amp):
+        with torch.amp.autocast(self.device.type, enabled=self.use_amp):
             # x : (1 + n_targets x batch_size x time_length x n_channels)
             n_stems = self.net.n_stems
             # do preprocessing
@@ -444,12 +444,12 @@ class SuperNet(nn.Module):
             output audio
         """
         
-        with amp.autocast(enabled=self.use_amp):
+        with torch.amp.autocast(self.device.type, enabled=self.use_amp):
             # x : (1 + n_targets x batch_size x time_length x n_channels)
             n_stems = self.net.n_stems
             # do preprocessing
             x, original_length, required_output_types, _input_type = self.preprocess(x,
-                                                                                     losses={}, 
+                                                                                     losses={},
                                                                                      output_data_type=DataType.TIME_SAMPLES)
             # perform forward pass through separation network
             out = {}
