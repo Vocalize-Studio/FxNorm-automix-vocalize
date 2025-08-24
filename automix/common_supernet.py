@@ -327,7 +327,8 @@ class SuperNet(nn.Module):
             dictionary of losses
         """
         
-        with torch.amp.autocast(self.device.type, enabled=self.use_amp):
+        device_type = next(self.net.parameters()).device.type
+        with torch.amp.autocast(device_type, enabled=self.use_amp):
             # x : (1 + n_targets x batch_size x time_length x n_channels)
 #             print('data', x.shape)
             n_stems = self.net.n_stems
@@ -394,7 +395,8 @@ class SuperNet(nn.Module):
             dictionary of losses
         """
         
-        with torch.amp.autocast(self.device.type, enabled=self.use_amp):
+        device_type = next(self.net.parameters()).device.type
+        with torch.amp.autocast(device_type, enabled=self.use_amp):
             # x : (1 + n_targets x batch_size x time_length x n_channels)
             n_stems = self.net.n_stems
             # do preprocessing
@@ -444,7 +446,8 @@ class SuperNet(nn.Module):
             output audio
         """
         
-        with torch.amp.autocast(self.device.type, enabled=self.use_amp):
+        device_type = next(self.net.parameters()).device.type
+        with torch.amp.autocast(device_type, enabled=self.use_amp):
             # x : (1 + n_targets x batch_size x time_length x n_channels)
             n_stems = self.net.n_stems
             # do preprocessing

@@ -587,7 +587,7 @@ if __name__ == '__main__':
 
             test_out = super_net.inference(test_data)
 
-            audio_out = test_out[DataType.TIME_SAMPLES].cpu().numpy()
+            audio_out = test_out[DataType.TIME_SAMPLES].cpu().float().numpy()
             audio_out = audio_out[..., :max_samples]
             if pad_samples:
                 audio_out = audio_out[..., pad_samples:]
